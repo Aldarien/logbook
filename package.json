@@ -1,0 +1,49 @@
+{
+  "name": "logbook",
+  "version": "1.0.0",
+  "description": "Log your activities",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha",
+    "dev": "npm run development",
+    "development": "npm run dev:css && npm run dev:js",
+    "prod": "npm run production",
+    "production": "npm run webpack",
+    "build:css": "npm run less && npm run autoprefix",
+    "dev:css": "npm run less-dev && npm run autoprefix",
+    "build:js": "npm run lint && npm run uglify",
+    "dev:js": "npm run webpack-dev",
+    "bootstrap": "npm run bootstrap-fonts",
+    "sass": "node-sass --output-style compressed -o public/css resources/sass",
+    "sass-dev": "node-sass --output-style nested --indent-type tab --indent-width 4 -o public/css resources/sass",
+    "less": "lessc -x resources/less/app.less public/css/app.css",
+    "less-dev": "lessc resources/less/app.less public/css/app.css",
+    "autoprefix": "postcss -u autoprefixer -r public/css/*",
+    "lint": "eslint resources/js",
+    "uglify": "uglifyjs resources/js/* -m -c -o public/js/app.js",
+    "uglify-dev": "uglifyjs resources/js/* -m -o public/js/app.js",
+    "bootstrap-fonts": "cp ~bootstrap/dist/fonts/* public/fonts",
+    "webpack": "webpack --env=production resources/js/app.js public/js/app.js",
+    "webpack-dev": "webpack --env=development resources/js/app.js public/js/app.js"
+  },
+  "author": "Aldarien",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^7.1.1",
+    "bootstrap": "^3.3.7",
+    "eslint": "^4.1.1",
+    "jquery": "^3.2.1",
+    "less-loader": "^4.0.4",
+    "mocha": "^3.4.2",
+    "node-sass": "^4.5.3",
+    "postcss-cli": "^4.1.0",
+    "uglify-js": "^3.0.21",
+    "webpack": "^3.0.0"
+  },
+  "dependencies": {
+    "less": "^2.7.2"
+  }
+}
