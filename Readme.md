@@ -1,4 +1,4 @@
-#Logbook
+# Logbook
 > Log your day activities
 
 Ever wanted to just write down what you have to do that day and at the end of the day write what you did?
@@ -24,9 +24,9 @@ composer install
 ```
 
 If you want to change less files, after the changes run:
-'''shell
+```shell
 npm run production
-'''
+```
 
 ## Features
 
