@@ -18,4 +18,8 @@ function db()
 {
 	return Logbook\App\DB::getInstance();
 }
+function eventFactory($event_type)
+{
+    return Logbook\Models\EventFactory::create($event_type);
+}
 ?>

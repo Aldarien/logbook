@@ -7,9 +7,9 @@ class EventDay
 {
 	protected $day;
 	protected $lists;
-	
+
 	protected $month = null;
-	
+
 	public function __construct($year, $month, $day)
 	{
 		$this->day = Carbon::createFromDate($year, $month, $day, config('app.timezone'));
@@ -18,7 +18,7 @@ class EventDay
 	}
 	protected function loadEvents()
 	{
-		$future = FutureEvent::loadAll([['start', $this->day->format('Y-m-d'), '>=']]);
+        $future = FutureEvent::loadAll([['start', $this->day->format('Y-m-d'), '>=']]);
 		if ($future) {
 			$this->lists['future']->loadEvents($future);
 		}
@@ -65,7 +65,7 @@ class EventDay
 		foreach ($events as $event) {
 			$this->addEvent('future', $event);
 		}
-		
+
 		return $this;
 	}
 	public function getOngoingEvents()
@@ -80,7 +80,7 @@ class EventDay
 		}
 		return $this->lists['past']->getEventPosition($description);
 	}
-	
+
 	public function getFutureEvents()
 	{
 		return $this->lists['future'];
