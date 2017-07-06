@@ -7,19 +7,12 @@ use Carbon\Carbon;
 
 if (isset($_POST['description'])) {
 	$day = null;
-	switch ($_POST['type']) {
-		case 'future':
-			$day = new Logbook\Models\FutureEvent();
-			break;
-		case 'past':
-			$day = new Logbook\Models\PastEvent();
-			break;
-	}
+	$day = eventFactory($_POST['type']);
 	$day->setDescription($_POST['description']);
 	$category = new Logbook\Models\EventCategory();
 	$category->load($_POST['category']);
 	$day->setCategory($category);
-	
+
 	$day->save();
 	header('Location: .');
 }
