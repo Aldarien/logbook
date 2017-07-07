@@ -18,8 +18,8 @@ class EventDay
 	}
 	protected function loadEvents()
 	{
-        $future = FutureEvent::loadAll([['start', $this->day->format('Y-m-d'), '>=']]);
-		if ($future) {
+        $future = FutureEvent::loadAll([['start', $this->day->format('Y-m-d'), '<='], ['end', 0]]);
+        if ($future) {
 			$this->lists['future']->loadEvents($future);
 		}
 		$past = PastEvent::loadAll([['start', $this->day->format('Y-m-d')]]);

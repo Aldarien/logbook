@@ -6,7 +6,7 @@ use Stringy\Stringy;
 class DBObject
 {
 	protected $id;
-	
+
 	protected function getFields()
 	{
 		$fields = [];
@@ -20,7 +20,7 @@ class DBObject
 				$fields []= $field;
 			}
 		}
-		
+
 		return $fields;
 	}
 	protected function tableName()
@@ -28,7 +28,7 @@ class DBObject
 		if (isset($this->table)) {
 			return $this->table;
 		}
-		
+
 		$class = Stringy::create(get_class($this));
 		$class = '' . $class->slice($class->indexOfLast("\\") + 1);
 		$name = Stringy::create($class)->underscored();
@@ -37,7 +37,7 @@ class DBObject
 		} elseif ($name->at(-1) != 's') {
 			$name = $name->append('s');
 		}
-		
+
 		return '' . $name;
 	}
 	public function load(int $id)
@@ -113,7 +113,7 @@ class DBObject
 		if (is_array($data)) {
 			$first = array_shift($data);
 			$this->fill($first);
-			
+
 			$results = [];
 			foreach ($data as $item) {
 				$class = get_class($this);
@@ -146,7 +146,7 @@ class DBObject
 				$input []= $values[$i];
 			}
 		}
-		
+
 		return $input;
 	}
 	protected function fill($data)
@@ -177,7 +177,7 @@ class DBObject
 			}
 		}
 	}
-	
+
 	public static function loadAll($wheres = null)
 	{
 		$db = db();
@@ -185,9 +185,9 @@ class DBObject
 		if ($wheres) {
 			foreach ($wheres as $where) {
 				$st->where($where);
-			}			
+			}
 		}
-		$data = $st->runQuery();
+        $data = $st->runQuery();
 		if ($data) {
 			$output = [];
 			if (is_array($data)) {
@@ -195,7 +195,7 @@ class DBObject
 					$class = get_called_class();
 					$obj = new $class();
 					$obj->fill($item);
-					
+
 					$output []= $obj;
 				}
 			} else {
@@ -206,14 +206,14 @@ class DBObject
 			}
 			return $output;
 		}
-		
+
 		return null;
 	}
 	protected static function className()
 	{
 		$class = Stringy::create(get_called_class());
 		$class = $class->slice($class->indexOfLast("\\") + 1);
-		
+
 		return '' . $class;
 	}
 	protected static function tName()

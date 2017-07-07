@@ -12,7 +12,7 @@ class DBHandler
 	protected $handler;
 	protected $inserts;
 	protected $insert_values;
-	
+
 	public function __construct()
 	{
 		switch (config('database.type')) {
@@ -24,7 +24,7 @@ class DBHandler
 				);
 		}
 	}
-	
+
 	/**
 	 * Specify the tables for the query
 	 * @param [string or array] $tables
@@ -39,7 +39,7 @@ class DBHandler
 		} else {
 			$this->table = $this->parseName($tables);
 		}
-		
+
 		return $this;
 	}
 	protected function parseName($name)
@@ -92,7 +92,7 @@ class DBHandler
 					$type = 'INNER JOIN';
 			}
 		}
-		
+
 		$this->joins []= $type . ' ' . $col1 . ' ' . $op . ' ' . $col2;
 		return $this;
 	}
@@ -115,7 +115,7 @@ class DBHandler
 		return $this;
 	}
 	/**
-	 * 
+	 *
 	 * @param [string or array] $fields, the field or fields that are selected
 	 */
 	public function select($fields)
@@ -132,11 +132,11 @@ class DBHandler
 		} else {
 			$this->fields []= $this->parseName($fields);
 		}
-		
+
 		return $this;
 	}
 	/**
-	 * 
+	 *
 	 * @param array $field_data, {table, field[, alias]}
 	 * @return string
 	 */
@@ -148,7 +148,7 @@ class DBHandler
 		$alias = array_pop($field_data);
 		return $this->parseColumn($field_data) . ' AS ' . $this->parseName($alias);
 	}
-	
+
 	public function where(array $where_data)
 	{
 		/**
@@ -162,7 +162,7 @@ class DBHandler
 		 * 8 {{{table1, column1}, value1[, operand1]}, ..}
 		 * 9 {{{table1, column1}, value_array1[, operand1]}, ..}
 		 */
-		
+
 		if (is_array($where_data[0])) {
 			// cases 4 - 9
 			if (is_array($where_data[0][0])) {
@@ -175,7 +175,7 @@ class DBHandler
 				/**
 				 * {{table, column}, value_array#2}
 				 * {{column1, value1}, {column2, value2}}
-				 * 
+				 *
 				 * {{table, column}, value_array#2, operand}
 				 * {{column1, value1}, {column2, value2}, {column3, value3}}
 				 */
@@ -197,11 +197,11 @@ class DBHandler
 			// cases 1 - 3
 			$this->parseWhere($where_data);
 		}
-		
+
 		return $this;
 	}
 	/**
-	 * 
+	 *
 	 * @param array $where_line
 	 */
 	protected function parseWhere(array $where_line)
@@ -213,8 +213,8 @@ class DBHandler
 		 * 4 {{table, column}, value[, operand]}
 		 * 5 {{table, column}, value_array[, operand]}
 		 */
-		
-		$col = $this->parseName($where_line[0]);
+
+        $col = $this->parseName($where_line[0]);
 		if (is_array($where_line[0])) {
 			$col = $this->parseColumn($where_line[0]);
 		}
@@ -223,8 +223,8 @@ class DBHandler
 			$val = '(' . implode(', ', $where_line[1]) . ')';
 		}
 		$op = '=';
-		if (isset($where_line[3])) {
-			switch (strtoupper($where_line[3])) {
+		if (isset($where_line[2])) {
+			switch (strtoupper($where_line[2])) {
 				case '=':
 				case '>':
 				case '>=':
@@ -233,13 +233,13 @@ class DBHandler
 				case 'LIKE':
 				case 'NOT LIKE':
 				case 'IN':
-					$op = strtoupper($where_line[3]);
+                	$op = strtoupper($where_line[2]);
 					break;
 				default:
 					$op = '=';
 			}
 		}
-		
+
 		$this->wheres []= $col . ' ' . $op . ' ?';
 		$this->where_values []= $val;
 	}
@@ -250,7 +250,7 @@ class DBHandler
 			$this->wheres []= $field . ' = ?';
 			$this->where_values []= $value;
 		}
-		
+
 		return $this;
 	}
 	public function query()
@@ -268,12 +268,12 @@ class DBHandler
 				return $this->query_type . ' ' . $this->table . ' SET ' . implode(' = ? , ', $this->inserts) . ' = ? WHERE ' . implode(' AND ', $this->wheres);
 		}
 	}
-	
+
 	public function runQuery()
 	{
 		$query = $this->query();
 		$st = $this->handler->prepare($query);
-		
+
 		switch ($this->query_type) {
 			case 'SELECT':
 				$bool = $st->execute($this->where_values);
@@ -313,7 +313,7 @@ class DBHandler
 		 * 2 {{column1, value1}, ..}
 		 */
 		$this->query_type = 'UPDATE';
-		
+
 		if (is_array($data[0])) {
 			// case 2
 			foreach ($data as $line) {
@@ -325,7 +325,7 @@ class DBHandler
 			$this->inserts []= $this->parseName($data[0]);
 			$this->insert_values []= $data[1];
 		}
-		
+
 		return $this;
 	}
 }
