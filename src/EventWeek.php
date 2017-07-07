@@ -33,6 +33,14 @@ class EventWeek
 		}
 	}
 
+    public function getStart()
+    {
+        return $this->date->copy()->startOfWeek();
+    }
+    public function getEnd()
+    {
+        return $this->date->copy()->endOfWeek();
+    }
 	public function addDay($day = null)
 	{
 		$this->days []= $day;
@@ -41,21 +49,45 @@ class EventWeek
     {
         $day = $this->getDay($weekday_number);
         if ($day !== null and !($day instanceOf EventDay)) {
-            $this->days[$weekday_number] = new EventDay($day->year, $day->month, $day->day);
+            $this->days[$weekday_number - 1] = new EventDay($day->year, $day->month, $day->day);
         }
         return $this;
     }
 
     public function getDay($weekday_number)
     {
-        if ($this->days[$weekday_number] != null) {
+        if ($this->days[$weekday_number - 1] != null) {
             return $this->days[$weekday_number - 1];
         }
         return null;
     }
-	public function getDays()
+	public function getDays($obj = false)
 	{
+        if ($obj) {
+            foreach ($this->days as $i => $day) {
+                $this->loadDay($i + 1);
+            }
+            return $this->days;
+        }
 		return $this->days;
 	}
+    public function getWeek()
+    {
+        return $this->week_number;
+    }
+    public function getYear($obj = false)
+    {
+        if ($obj) {
+            return new EventYear($this->year);
+        }
+        return $this->year;
+    }
+    public function getMonth($obj = false)
+    {
+        if ($obj) {
+            return new EventMonth($this->year, $this->date->month);
+        }
+        return $this->date->month;
+    }
 }
 ?>
