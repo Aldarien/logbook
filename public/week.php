@@ -1,5 +1,5 @@
 <?php
-include_once __DIR__ . '/../autoload/autoload.php';
+include_once __DIR__ . '/../bootstrap/autoload.php';
 
 setlocale(LC_TIME, config('app.locale'));
 

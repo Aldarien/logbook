@@ -12,6 +12,9 @@
 		"psr-4" : {
 			"Logbook\\Models\\" : "src",
 			"Logbook\\App\\" : "app"
-		}
+		},
+		"files" : [
+			"app/helpers/functions.php"
+		]
 	}
 }
